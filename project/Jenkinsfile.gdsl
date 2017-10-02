@@ -1,0 +1,38 @@
+#!groovy
+
+@Library('pipeline-microservice-library')
+import com.pwc.build
+import com.pwc.git
+import com.pwc.nexus
+import com.pwc.notification
+
+node {
+
+    stage('Checkout') {
+
+    }
+
+    stage('Jenkins') {
+
+        if (!currentBuild.result) {
+            currentBuild.result = "SUCCESS"
+        }
+
+    }
+
+    stage('Notification') {
+
+        if (!currentBuild.result) {
+            currentBuild.result = "SUCCESS"
+        }
+
+        def subject = "${JOB_NAME} - ${currentBuild.result}"
+        def emailBody = "Build Url: ${BUILD_URL}\nBuiild Number: ${BUILD_NUMBER}"
+
+        Email email = new Email()
+        email.sendEmailNotification(subject, emailBody, "noreply@gmail.com")
+
+    }
+
+
+}
